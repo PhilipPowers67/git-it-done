@@ -11,25 +11,34 @@ var formSubmitHandler = function(event) {
     
     if (username) {
         getUserRepos(username);
+        repoContainerEl.textContent = '';
         nameInputEl.value = "";
     } else {
         alert("Please enter a GitHub username");
     }
-}
+};
 
 var getUserRepos = function(user) {
     //format the github api url
  var apiUrl = "https://api.github.com/users/" + user + "/repos";
 
  // make a request to the URl
-    fetch(apiUrl).then(function(response) {
-        if (response.ok) {
-     response.json().then(function(data) {
+    fetch(apiUrl)
+        .then(function(response) {
+
+    // request was successful
+
+    if (response.ok) {
+        response.json().then(function(data) {
          displayRepos(data, user);
      });
     } else {
         alert("Error: GitHub user not found!");
     }
+    })
+    .catch(function(error) {
+        // notice this '.catch()' getting chained onto the end of the '.then() method
+       alert("Unable to connect to GitHub"); 
     });
 
     
